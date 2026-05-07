@@ -1,0 +1,12 @@
+# archivos de compilacion
+*.o
+*.out
+*.exe
+*.dll
+*.so
+*.dylib
+
+# carpeta de IDE (VSCode)
+.idea/
+.vscode/
+cmake-build-debug/
