@@ -14,12 +14,14 @@ int main() {
     std::cout << "Se han cargado " << registroCanciones.getTamaño() << " canciones en el registro.\n";
     std::cout << "------------------------------------------\n";
 
-    Nodo<Cancion>* current = registroCanciones.getCabeza();
-    while (current != nullptr)
+    Nodo<Cancion>* actual = registroCanciones.getCabeza();
+    while (actual != nullptr)
     {
-        std::cout << current->dato.getId() << ". "
-                  << current->dato.getStringMostrar() << "\n";
-    }   current = current->siguiente;
+        std::cout << actual->dato.getId() << ". "
+                  << actual->dato.getStringMostrar() << "\n";
+       actual = actual->siguiente;
+    
+    }
     
     return 0;
 }
