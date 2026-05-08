@@ -39,6 +39,9 @@ public:
     ListaDobleEnlazada<Cancion>& getListaActual();
     void mostrarMenuListaActual() const;
     void saltarACancion(int indiceDesplazamiento);
+    void mostrarListadoGlobal() const;
+    void reproducirDesdeGlobal(int indice);
+    void encolarDesdeGlobal(int indice);
     void poblarListaAleatoria();
 
 

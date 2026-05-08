@@ -99,34 +99,15 @@ int main() {
         char comando = toupper(entrada[0]);
 
    switch (comando) {
-            case 'W':
-                reproductor.alternarReproduccion();
-                break;
-            case 'S':
-                reproductor.alternarAleatorio();
-                break;
-            case 'R':
-                reproductor.ciclarModoRepeticion();
-                break;
-            case 'Q':
-                reproductor.reproducirAnterior();
-                break;
-            case 'E':
-                reproductor.reproducirSiguiente();
-                break;
-            case 'A':
-                reproductor.mostrarMenuListaActual();
-                break;
-            case 'L':
-                // Submenu Listado de Canciones
-                break;
-            case 'X':
-                ejecutando = false;
-                // Faltaria guardar el estado en status.cfg antes de salir
-                break;
-            default:
-                // Si presiona otra tecla, el bucle simplemente limpia la pantalla y vuelve a mostrar el menu
-                break;
+case 'W': reproductor.alternarReproduccion(); break;
+            case 'S': reproductor.alternarAleatorio(); break;
+            case 'R': reproductor.ciclarModoRepeticion(); break;
+            case 'Q': reproductor.reproducirAnterior(); break;
+            case 'E': reproductor.reproducirSiguiente(); break;
+            case 'A': manejarMenuLista(reproductor); break;
+            case 'L': manejarMenuListadoGlobal(reproductor); break;
+            case 'X': ejecutando = false; break;
+            default: break;
         }
     }
 

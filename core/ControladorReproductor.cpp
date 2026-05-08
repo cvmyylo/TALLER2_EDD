@@ -152,3 +152,50 @@ void ControladorReproductor::saltarACancion(int indiceDesplazamiento) {
         estaReproduciendo = true;             
     }
 }
+
+void ControladorReproductor::mostrarListadoGlobal() const {
+        std::cout << "Listado Completo de Canciones:\n";
+    if (registroGlobal->estaVacia()) {
+        std::cout << "No hay canciones cargadas en el sistema.\n";
+        return;
+    }
+    
+    Nodo<Cancion>* temp = registroGlobal->getCabeza();
+    int indice = 1;
+    while (temp != nullptr) {
+        std::cout << indice << ". " << temp->dato.getTitulo() << " - " << temp->dato.getArtista() << "\n";
+        temp = temp->siguiente;
+        indice++;
+    }
+}
+
+void ControladorReproductor::reproducirDesdeGlobal(int indice) {    
+    Nodo<Cancion>* temp = registroGlobal->getCabeza();
+    int contador = 1;
+
+    while (temp != nullptr && contador < indice) {
+        temp = temp->siguiente;
+        contador++;
+    }
+    
+    if (temp != nullptr) {
+        listaActual.limpiar();
+        listaActual.agregarAlFinal(temp->dato);
+        nodoCancionActual = listaActual.getCabeza();
+        estaReproduciendo = true;
+    }
+}
+
+void ControladorReproductor::encolarDesdeGlobal(int indice) {
+    Nodo<Cancion>* temp = registroGlobal->getCabeza();
+    int contador = 1;
+    
+    while (temp != nullptr && contador < indice) {
+        temp = temp->siguiente;
+        contador++;
+    }
+    
+    if (temp != nullptr) {
+        listaActual.agregarAlFinal(temp->dato);
+    }
+}
