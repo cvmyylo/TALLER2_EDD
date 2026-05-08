@@ -11,6 +11,14 @@ void limpiarPantalla() {
     system("clear"); //"clear" ya que uso MacOS
 }
 
+void imprimirMenuPrincipal(ControladorReproductor& reproductor) {
+    limpiarPantalla();
+    
+    std::string textoEstado = "Reproduccion Detenida";
+    if (reproductor.tieneCancionActual()) {
+        textoEstado = reproductor.getEstaReproduciendo() ? "Reproduciendo" : "En pausa";
+    }
+
     std::string modificadores = "";
     bool tieneS = reproductor.getAleatorioActivado();
     ModoRepeticion modoR = reproductor.getModoRepeticion();
@@ -24,13 +32,11 @@ void limpiarPantalla() {
         modificadores += ") ";
     }
 
-
-
    if (reproductor.tieneCancionActual()) {
         Cancion actual = reproductor.getCancionActual();
         std::cout << textoEstado << " " << modificadores << ": " << actual.getTitulo() << "\n";
         std::cout << "Artista: " << actual.getArtista() << "\n";
-        std::cout << "Album: " << actual.getAlbum() << " [" << actual.getAnio() << "]\n";
+        std::cout << "Album: " << actual.getAlbum() << " [" << actual.getAño() << "]\n";
     } else {
         std::cout << textoEstado << "\n"; 
     }
@@ -53,7 +59,7 @@ void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
 
         while (enSubmenu) {
         limpiarPantalla();
-        reproductor.mostrarListadoGlobal();
+        reproductor.mostrarMenuListaActual();
         
         std::cout << "\nOpciones:\n";
         std::cout << "R<num> - Reproducir cancion inmediatamente\n";
@@ -64,11 +70,16 @@ void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
         std::cin >> entrada;
         char comando = toupper(entrada[0]);
 
-                if (comando == 'V') {
+            if (comando == 'V') {
             enSubmenu = false; 
         } else if ((comando == 'R' || comando == 'A') && entrada.length() > 1) {
-            
-            enSubmenu = false; 
+            try {
+                std::string parteNumero = entrada.substr(1);
+                int indice = std::stoi(parteNumero); 
+                reproductor.saltarACancion(indice);
+                enSubmenu = false; 
+            } catch (...) {
+            }
         }
     }
 }
@@ -76,7 +87,6 @@ void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
 int main() {
     ListaDobleEnlazada<Cancion> registroCanciones;
     GestorArchivos::cargarFuenteMusica("music_source.txt", registroCanciones);
-    
     ControladorReproductor reproductor(&registroCanciones);
 
     bool ejecutando = true;
@@ -88,7 +98,7 @@ int main() {
         
         char comando = toupper(entrada[0]);
 
-   switch (command) {
+   switch (comando) {
             case 'W':
                 reproductor.alternarReproduccion();
                 break;
@@ -108,11 +118,11 @@ int main() {
                 reproductor.mostrarMenuListaActual();
                 break;
             case 'L':
-                // TODO: Submenu Listado de Canciones
+                // Submenu Listado de Canciones
                 break;
             case 'X':
                 ejecutando = false;
-                // TODO: Faltaria guardar el estado en status.cfg antes de salir
+                // Faltaria guardar el estado en status.cfg antes de salir
                 break;
             default:
                 // Si presiona otra tecla, el bucle simplemente limpia la pantalla y vuelve a mostrar el menu

@@ -37,9 +37,10 @@ public:
     void ciclarModoRepeticion();            
 
     ListaDobleEnlazada<Cancion>& getListaActual();
-
-    void mostrarMenuListaActual() const;
     void poblarListaAleatoria();
+    void mostrarMenuListaActual() const;
+    void saltarACancion(int indiceDesplazamiento);
+
 
 };
 
