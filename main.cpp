@@ -73,10 +73,10 @@ int main() {
                 reproductor.ciclarModoRepeticion();
                 break;
             case 'Q':
-                // TODO: player.playPrevious(); 
+                reproductor.reproducirAnterior();
                 break;
             case 'E':
-                // TODO: player.playNext(); 
+                reproductor.reproducirSiguiente();
                 break;
             case 'A':
                 // TODO: Submenu Lista Reproduccion Actual
