@@ -43,7 +43,8 @@ public:
     void reproducirDesdeGlobal(int indice);
     void encolarDesdeGlobal(int indice);
     void poblarListaAleatoria();
-
+    void guardarEstado() const;
+    void cargarEstado();
 
 };
 

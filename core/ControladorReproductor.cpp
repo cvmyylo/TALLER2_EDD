@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
+#include <sstream>
+
 
 ControladorReproductor::ControladorReproductor(ListaDobleEnlazada<Cancion>* registro) {
     this->registroGlobal = registro;
@@ -199,3 +202,68 @@ void ControladorReproductor::encolarDesdeGlobal(int indice) {
         listaActual.agregarAlFinal(temp->dato);
     }
 }
+
+void ControladorReproductor::guardarEstado() const {
+    std::ofstream archivo("status.cfg");
+    if (!archivo.is_open()) return;
+
+    archivo << aleatorioActivado << "\n";
+    archivo << modoRepeticion << "\n";
+
+    if (tieneCancionActual()) {
+        archivo << nodoCancionActual->dato.getId() << "\n";
+    } else {
+        archivo << "-1\n";
+    }
+    Nodo<Cancion>* temp = listaActual.getCabeza();
+    while (temp != nullptr) {
+        archivo << temp->dato.getId() << " ";
+        temp = temp->siguiente;
+    }
+    archivo << "\n";
+    
+    archivo.close();
+}
+
+void ControladorReproductor::cargarEstado() {
+    std::ifstream archivo("status.cfg");
+    if (!archivo.is_open()) return; 
+
+    std::string linea;
+
+    if (std::getline(archivo, linea)) aleatorioActivado = (linea == "1");
+    
+    if (std::getline(archivo, linea)) modoRepeticion = static_cast<ModoRepeticion>(std::stoi(linea));
+    
+    int idActual = -1;
+    if (std::getline(archivo, linea)) idActual = std::stoi(linea);
+
+    if (std::getline(archivo, linea)) {
+        std::stringstream ss(linea);
+        std::string idStr;
+        while (ss >> idStr) {
+            int id = std::stoi(idStr);
+            Nodo<Cancion>* temp = registroGlobal->getCabeza();
+            while (temp != nullptr) {
+                if (temp->dato.getId() == id) {
+                    listaActual.agregarAlFinal(temp->dato);
+                    break;
+                }
+                temp = temp->siguiente;
+            }
+        }
+    }
+
+    if (idActual != -1) {
+        Nodo<Cancion>* temp = listaActual.getCabeza();
+        while (temp != nullptr) {
+            if (temp->dato.getId() == idActual) {
+                nodoCancionActual = temp;
+                break;
+            }
+            temp = temp->siguiente;
+        }
+    }
+    archivo.close();
+}
+

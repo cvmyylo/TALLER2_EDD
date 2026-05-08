@@ -53,6 +53,35 @@ void imprimirMenuPrincipal(ControladorReproductor& reproductor) {
     std::cout << "\nIngrese Opcion: ";
 }
 
+void manejarMenuLista(ControladorReproductor& reproductor) {
+    bool enSubmenu = true;
+    std::string entrada;
+
+    while (enSubmenu) {
+        limpiarPantalla();
+        reproductor.mostrarMenuListaActual(); 
+        
+        std::cout << "\nOpciones:\n";
+        std::cout << "S<num> - Saltar a la cancion seleccionada\n";
+        std::cout << "V - Volver al menu principal\n";
+        std::cout << "\nIngrese Opcion: ";
+        
+        std::cin >> entrada;
+        char comando = toupper(entrada[0]);
+        if (comando == 'V') {
+            enSubmenu = false; 
+        } else if (comando == 'S' && entrada.length() > 1) {
+            try {
+                std::string parteNumero = entrada.substr(1);
+                int indice = std::stoi(parteNumero); 
+                reproductor.saltarACancion(indice);
+                enSubmenu = false; 
+            } catch (...) {
+            }
+        }
+    }
+}
+
 void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
     bool enSubmenu = true;
     std::string entrada;
@@ -88,6 +117,7 @@ int main() {
     ListaDobleEnlazada<Cancion> registroCanciones;
     GestorArchivos::cargarFuenteMusica("music_source.txt", registroCanciones);
     ControladorReproductor reproductor(&registroCanciones);
+    reproductor.cargarEstado();
 
     bool ejecutando = true;
     std::string entrada;
@@ -99,14 +129,17 @@ int main() {
         char comando = toupper(entrada[0]);
 
    switch (comando) {
-case 'W': reproductor.alternarReproduccion(); break;
+            case 'W': reproductor.alternarReproduccion(); break;
             case 'S': reproductor.alternarAleatorio(); break;
             case 'R': reproductor.ciclarModoRepeticion(); break;
             case 'Q': reproductor.reproducirAnterior(); break;
             case 'E': reproductor.reproducirSiguiente(); break;
             case 'A': manejarMenuLista(reproductor); break;
             case 'L': manejarMenuListadoGlobal(reproductor); break;
-            case 'X': ejecutando = false; break;
+            case 'X': 
+                reproductor.guardarEstado();
+                ejecutando = false; 
+                break;
             default: break;
         }
     }
