@@ -48,7 +48,7 @@ void ControladorReproductor::poblarListaAleatoria() {
     if (registroGlobal->estaVacia()) return;
     listaActual.limpiar();
 
-        int totalCanciones = registroGlobal->getTamaño();
+    int totalCanciones = registroGlobal->getTamaño();
     Cancion* arregloTemporal = new Cancion[totalCanciones];
     
     Nodo<Cancion>* actual = registroGlobal->getCabeza();
@@ -77,12 +77,13 @@ void ControladorReproductor::reproducirSiguiente() {
         return;
     }
 
-        if (listaActual.estaVacia()) {
-        poblarListaAleatoria();
-        nodoCancionActual = listaActual.getCabeza();
-        estaReproduciendo = true;
-        return;
+    if (listaActual.estaVacia()) {
+    poblarListaAleatoria();
+    nodoCancionActual = listaActual.getCabeza();
+    estaReproduciendo = true;
+    return;
     }
+    
     if (nodoCancionActual != nullptr && nodoCancionActual->siguiente != nullptr) {
         nodoCancionActual = nodoCancionActual->siguiente;
         estaReproduciendo = true;
@@ -157,7 +158,7 @@ void ControladorReproductor::saltarACancion(int indiceDesplazamiento) {
 }
 
 void ControladorReproductor::mostrarListadoGlobal() const {
-        std::cout << "Listado Completo de Canciones:\n";
+    std::cout << "Listado Completo de Canciones:\n";
     if (registroGlobal->estaVacia()) {
         std::cout << "No hay canciones cargadas en el sistema.\n";
         return;

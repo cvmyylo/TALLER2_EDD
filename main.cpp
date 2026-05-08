@@ -88,7 +88,7 @@ void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
 
         while (enSubmenu) {
         limpiarPantalla();
-        reproductor.mostrarMenuListaActual();
+        reproductor.mostrarListadoGlobal();
         
         std::cout << "\nOpciones:\n";
         std::cout << "R<num> - Reproducir cancion inmediatamente\n";
@@ -99,15 +99,25 @@ void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
         std::cin >> entrada;
         char comando = toupper(entrada[0]);
 
-            if (comando == 'V') {
+        if (comando == 'V') {
             enSubmenu = false; 
         } else if ((comando == 'R' || comando == 'A') && entrada.length() > 1) {
             try {
                 std::string parteNumero = entrada.substr(1);
                 int indice = std::stoi(parteNumero); 
-                reproductor.saltarACancion(indice);
+                if (comando == 'R') {
+                    reproductor.reproducirDesdeGlobal(indice);
                 enSubmenu = false; 
+                } else if (comando == 'A') {
+                    reproductor.encolarDesdeGlobal(indice);
+                }
             } catch (...) {
+                std::cout << "Error: Debe ingresar un numero valido despues de la letra.\n";
+                std::cout << "Presione Enter para intentar nuevamente...";               
+                
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cin.get();
             }
         }
     }
