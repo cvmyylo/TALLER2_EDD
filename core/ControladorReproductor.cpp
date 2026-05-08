@@ -104,3 +104,34 @@ void ControladorReproductor::reproducirAnterior() {
     nodoCancionActual = nodoCancionActual->anterior;
     estaReproduciendo = true;
 }
+
+void ControladorReproductor::mostrarMenuListaActual() const {
+    std::string modificadores = "";
+    if (aleatorioActivado || modoRepeticion != REPETICION_APAGADA) {
+        modificadores += "(";
+        if (aleatorioActivado) modificadores += "S";
+        if (aleatorioActivado && modoRepeticion != REPETICION_APAGADA) modificadores += "-";
+        if (modoRepeticion == REPETICION_UNA) modificadores += "R1";
+        if (modoRepeticion == REPETICION_TODAS) modificadores += "RA";
+        modificadores += ") ";
+    }
+    if (tieneCancionActual()) {
+        Cancion actual = getCancionActual();
+        std::cout << "Actual " << modificadores << ": " << actual.getTitulo() << " " << actual.getArtista() << "\n";
+    } else {
+        std::cout << "Actual: Ninguna\n";
+    }
+
+    std::cout << "Lista de reproduccion actual:\n";
+    if (listaActual.estaVacia() || !tieneCancionActual() || nodoCancionActual->siguiente == nullptr) {
+        std::cout << "Vacia\n";
+    } else {
+        Nodo<Cancion>* temp = nodoCancionActual->siguiente;
+        int indice = 1;
+        while (temp != nullptr) {
+            std::cout << indice << ". " << temp->dato.getTitulo() << " - " << temp->dato.getArtista() << "\n";
+            temp = temp->siguiente;
+            indice++;
+        }
+    }
+}

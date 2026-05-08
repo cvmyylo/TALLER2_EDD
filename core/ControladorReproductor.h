@@ -38,7 +38,7 @@ public:
 
     ListaDobleEnlazada<Cancion>& getListaActual();
 
-
+    void mostrarMenuListaActual() const;
     void poblarListaAleatoria();
 
 };

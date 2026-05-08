@@ -47,6 +47,32 @@ void limpiarPantalla() {
     std::cout << "\nIngrese Opcion: ";
 }
 
+void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
+    bool enSubmenu = true;
+    std::string entrada;
+
+        while (enSubmenu) {
+        limpiarPantalla();
+        reproductor.mostrarListadoGlobal();
+        
+        std::cout << "\nOpciones:\n";
+        std::cout << "R<num> - Reproducir cancion inmediatamente\n";
+        std::cout << "A<num> - Agregar cancion a la cola de reproduccion\n";
+        std::cout << "V - Volver al menu principal\n";
+        std::cout << "\nIngrese Opcion: ";
+        
+        std::cin >> entrada;
+        char comando = toupper(entrada[0]);
+
+                if (comando == 'V') {
+            enSubmenu = false; 
+        } else if ((comando == 'R' || comando == 'A') && entrada.length() > 1) {
+            
+            enSubmenu = false; 
+        }
+    }
+}
+
 int main() {
     ListaDobleEnlazada<Cancion> registroCanciones;
     GestorArchivos::cargarFuenteMusica("music_source.txt", registroCanciones);
@@ -79,7 +105,7 @@ int main() {
                 reproductor.reproducirSiguiente();
                 break;
             case 'A':
-                // TODO: Submenu Lista Reproduccion Actual
+                reproductor.mostrarMenuListaActual();
                 break;
             case 'L':
                 // TODO: Submenu Listado de Canciones
