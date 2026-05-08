@@ -135,3 +135,20 @@ void ControladorReproductor::mostrarMenuListaActual() const {
         }
     }
 }
+
+void ControladorReproductor::saltarACancion(int indiceDesplazamiento) {
+    if (!tieneCancionActual() || nodoCancionActual->siguiente == nullptr) return;
+
+    Nodo<Cancion>* nodoObjetivo = nodoCancionActual->siguiente;
+    int contador = 1;
+    
+    while (nodoObjetivo != nullptr && contador < indiceDesplazamiento) {
+        nodoObjetivo = nodoObjetivo->siguiente;
+        contador++;
+    }
+
+    if (nodoObjetivo != nullptr) {
+        nodoCancionActual = nodoObjetivo; 
+        estaReproduciendo = true;             
+    }
+}
