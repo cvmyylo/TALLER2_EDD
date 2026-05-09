@@ -28,6 +28,8 @@ Funcionalidades Implementadas
 
 * `X`: Salir del programa guardando el estado actual (status.cfg). Al volver a ejecutar, el reproductor retomará exactamente donde quedó.
 
+
+
 ## Instrucciones de Compilación y Ejecución
 Para compilar el proyecto en un entorno basado en Unix (Mac/Linux), abre la terminal en la carpeta raíz del proyecto y ejecuta el siguiente comando:
 
@@ -37,5 +39,15 @@ Una vez compilado sin errores, inicia el reproductor con el comando de debajo:
 g++ main.cpp classes/Cancion.cpp core/GestorArchivos.cpp core/ControladorReproductor.cpp -o reproductor -std=c++14
 
 ./reproductor
+
+## Reinicio del Estado y Arranque en frio
+
+El reproductor guarda automáticamente tu última sesión en un archivo físico llamado `status.cfg` cada vez que utilizas la opción **X - Salir**. 
+
+Si deseas probar el programa desde cero y borrar la lista de reproducción y los estados guardados, debes eliminar este archivo antes de ejecutar el reproductor. Puedes hacerlo rápidamente ejecutando el siguiente comando en tu consola:
+
+```bash
+rm status.cfg
+
 
 
