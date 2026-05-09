@@ -28,7 +28,68 @@ Funcionalidades Implementadas
 
 * `X`: Salir del programa guardando el estado actual (status.cfg). Al volver a ejecutar, el reproductor retomará exactamente donde quedó.
 
+## Diagrama de Clases (UML)
 
+A continuación se detalla la arquitectura del sistema. Se destaca la implementación manual de la estructura de datos para cumplir con la restricción de NO uso de contenedores STL.
+
+```mermaid
+classDiagram
+    class Cancion {
+        -int id
+        -string titulo
+        -string artista
+        -string album
+        -int anio
+        -int duracionSegundos
+        -string rutaArchivo
+        +getId() int
+        +getTitulo() string
+        +getArtista() string
+        +getStringMostrar() string
+    }
+
+    class Nodo~T~ {
+        +T dato
+        +Nodo~T~* siguiente
+        +Nodo~T~* anterior
+    }
+
+    class ListaDobleEnlazada~T~ {
+        -Nodo~T~* cabeza
+        -Nodo~T~* cola
+        -int tamano
+        +agregarAlFinal(T dato)
+        +limpiar()
+        +getTamano() int
+        +estaVacia() bool
+    }
+
+    class GestorArchivos {
+        +cargarFuenteMusica(string, ListaDobleEnlazada~Cancion~&) static
+    }
+
+    class ControladorReproductor {
+        -ListaDobleEnlazada~Cancion~* registroGlobal
+        -ListaDobleEnlazada~Cancion~ listaActual
+        -Nodo~Cancion~* nodoCancionActual
+        -bool estaReproduciendo
+        -bool aleatorioActivado
+        -ModoRepeticion modoRepeticion
+        +alternarReproduccion()
+        +reproducirSiguiente()
+        +reproducirAnterior()
+        +saltarACancion(int)
+        +guardarEstado()
+        +cargarEstado()
+    }
+
+    Nodo "1" *-- "1" Nodo : punteros sig/ant
+    ListaDobleEnlazada "1" *-- "0..*" Nodo : contiene
+    ControladorReproductor "1" o-- "1" ListaDobleEnlazada : gestiona listaActual
+    ControladorReproductor "1" -- "1" ListaDobleEnlazada : referencia registroGlobal
+    GestorArchivos ..> ListaDobleEnlazada : puebla
+    GestorArchivos ..> Cancion : crea
+```
 
 ## Instrucciones de Compilación y Ejecución
 Para compilar el proyecto en un entorno basado en Unix (Mac/Linux), abre la terminal en la carpeta raíz del proyecto y ejecuta el siguiente comando:
@@ -39,6 +100,7 @@ Una vez compilado sin errores, inicia el reproductor con el comando de debajo:
 g++ main.cpp classes/Cancion.cpp core/GestorArchivos.cpp core/ControladorReproductor.cpp -o reproductor -std=c++14
 
 ./reproductor
+```
 
 ## Reinicio del Estado y Arranque en frio
 
@@ -48,6 +110,6 @@ Si deseas probar el programa desde cero y borrar la lista de reproducción y los
 
 ```bash
 rm status.cfg
-
+```
 
 
