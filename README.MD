@@ -30,8 +30,6 @@ Funcionalidades Implementadas
 
 ## Diagrama de Clases (UML)
 
-A continuación se detalla la arquitectura del sistema. Se destaca la implementación manual de la estructura de datos para cumplir con la restricción de NO uso de contenedores STL.
-
 ```mermaid
 classDiagram
     class Cancion {
