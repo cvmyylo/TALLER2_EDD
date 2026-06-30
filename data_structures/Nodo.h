@@ -8,7 +8,8 @@ public:
     Nodo<T>* siguiente;
     Nodo<T>* anterior;
 
-    Nodo(T dato) : dato(dato), siguiente(nullptr), anterior(nullptr) {}
+    Nodo(T dato);
 };
 
+#include "Nodo.cpp"
 #endif

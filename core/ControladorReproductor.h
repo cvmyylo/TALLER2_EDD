@@ -45,6 +45,9 @@ public:
     void poblarListaAleatoria();
     void guardarEstado() const;
     void cargarEstado();
+    void agregarCancionGlobal(const Cancion& nuevaCancion);
+    void eliminarCancionGlobal(int id);
+    ListaDobleEnlazada<Cancion>* getRegistroGlobal() const;
 
 };
 

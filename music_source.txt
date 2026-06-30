@@ -1,10 +1,10 @@
-1, POLLYPOCKET, Martinwhite ft. Katteyes, POLLYPOCKET (Single), 2026, 157, C:/Reproductor/musica/pollypocket.mp3
-2, Who, Jimin, MUSE, 2024, 170, C:/Reproductor/musica/who.mp3
-3, De Lejitos, Jay Wheeler, Musica Buena Para Dias Malos, 2024, 207, C:/Reproductor/musica/de_lejitos.mp3
-4, 666, Yan Block ft. Cris MJ y Panda Black, 666 (Single), 2026, 180, C:/Reproductor/musica/666.mp3
-5, KOKO, Omar Courtz, KOKO (Single), 2024, 195, C:/Reproductor/musica/koko.mp3
-6, ALO, Katteyes ft. SINAKA, ALO (Single), 2026, 145, C:/Reproductor/musica/alo.mp3
-7, Dando Vueltas, Kidd Voodoo ft. Pablo Alborán, Dando Vueltas (Single), 2026, 210, C:/Reproductor/musica/dando_vueltas.mp3
-8, DUBAI, Jere Klein ft. Jairo Vera y Gittobeatz, DUBAI (Single), 2026, 163, C:/Reproductor/musica/dubai.mp3
-9, Cuando No Era Cantante (Remix), El Bogueto ft. Anuel AA, Cuando No Era Cantante, 2026, 327, C:/Reproductor/musica/cuando_no_era_cantante.mp3
-10, SWIM, BTS, SWIM (Single), 2026, 159, C:/Reproductor/musica/swim.mp3
+1,POLLYPOCKET,Martinwhite ft. Katteyes,POLLYPOCKET (Single),2026,157,C:/Reproductor/musica/pollypocket.mp3
+2,Who,Jimin,MUSE,2024,170,C:/Reproductor/musica/who.mp3
+3,De Lejitos,Jay Wheeler,Musica Buena Para Dias Malos,2024,207,C:/Reproductor/musica/de_lejitos.mp3
+4,666,Yan Block ft. Cris MJ y Panda Black,666 (Single),2026,180,C:/Reproductor/musica/666.mp3
+5,KOKO,Omar Courtz,KOKO (Single),2024,195,C:/Reproductor/musica/koko.mp3
+6,ALO,Katteyes ft. SINAKA,ALO (Single),2026,145,C:/Reproductor/musica/alo.mp3
+7,Dando Vueltas,Kidd Voodoo ft. Pablo Alborán,Dando Vueltas (Single),2026,210,C:/Reproductor/musica/dando_vueltas.mp3
+8,DUBAI,Jere Klein ft. Jairo Vera y Gittobeatz,DUBAI (Single),2026,163,C:/Reproductor/musica/dubai.mp3
+9,Cuando No Era Cantante (Remix),El Bogueto ft. Anuel AA,Cuando No Era Cantante,2026,327,C:/Reproductor/musica/cuando_no_era_cantante.mp3
+10,SWIM,BTS,SWIM (Single),2026,159,C:/Reproductor/musica/swim.mp3

@@ -11,37 +11,17 @@ private:
     int tamaño;
 
 public:
-    ListaDobleEnlazada() : cabeza(nullptr), cola(nullptr), tamaño(0) {}
+    ListaDobleEnlazada();
+    ~ListaDobleEnlazada();
 
-    ~ListaDobleEnlazada() { limpiar(); }
+    void agregarAlFinal(T dato);
+    void limpiar();
+    bool eliminarPorId(int idObjetivo); 
 
-    void agregarAlFinal(T dato) {
-        Nodo<T>* nuevoNodo = new Nodo<T>(dato);
-        if (cabeza == nullptr) {
-            cabeza = cola = nuevoNodo;
-        } else {
-            cola->siguiente = nuevoNodo;
-            nuevoNodo->anterior = cola;
-            cola = nuevoNodo;
-        }
-        tamaño++;
-    }
-
-    void limpiar() {
-        Nodo<T>* actual = cabeza;
-        while (actual != nullptr) {
-            Nodo<T>* nodoSiguiente = actual->siguiente;
-            delete actual;
-            actual = nodoSiguiente;
-        }
-        cabeza = nullptr;
-        cola = nullptr;
-        tamaño = 0;
-    }
-
-    int getTamaño() const { return tamaño; }
-    bool estaVacia() const { return tamaño == 0; }
-    Nodo<T>* getCabeza() const { return cabeza; }
+    int getTamaño() const;
+    bool estaVacia() const;
+    Nodo<T>* getCabeza() const;
 };
 
+#include "ListaDobleEnlazada.cpp"
 #endif

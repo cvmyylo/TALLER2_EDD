@@ -49,6 +49,8 @@ void imprimirMenuPrincipal(ControladorReproductor& reproductor) {
     std::cout << "R - Repeticion (Desactivado/Repetir una/Repetir todas)\n";
     std::cout << "A - Ver lista de reproduccion actual\n";
     std::cout << "L - Listado de canciones\n";
+    std::cout << "N - Agregar nueva cancion\n"; // <--- AGREGAR ESTO
+    std::cout << "D - Eliminar cancion\n";      // <--- AGREGAR ESTO
     std::cout << "X - Salir\n";
     std::cout << "\nIngrese Opcion: ";
 }
@@ -123,6 +125,52 @@ void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
     }
 }
 
+void manejarAgregarCancion(ControladorReproductor& reproductor) {
+    limpiarPantalla();
+    std::string titulo, artista, album, añoStr, duracionStr, ruta;
+    
+    std::cout << "--- Agregar Nueva Cancion ---\n";
+    std::cout << "Titulo: "; std::getline(std::cin, titulo);
+    std::cout << "Artista: "; std::getline(std::cin, artista);
+    std::cout << "Album: "; std::getline(std::cin, album);
+    std::cout << "Año: "; std::getline(std::cin, añoStr);
+    std::cout << "Duracion (segundos): "; std::getline(std::cin, duracionStr);
+    std::cout << "Ruta del archivo: "; std::getline(std::cin, ruta);
+
+    try {
+        int año = std::stoi(añoStr);
+        int duracion = std::stoi(duracionStr);
+        
+        int nuevoId = reproductor.getRegistroGlobal()->getTamaño() + 1;
+        Cancion nueva(nuevoId, titulo, artista, album, año, duracion, ruta);
+        
+        reproductor.agregarCancionGlobal(nueva);
+        std::cout << "\nCancion agregada y guardada exitosamente.\n";
+    } catch (...) {
+        std::cout << "\nError: Datos numericos invalidos. No se guardo la cancion.\n";
+    }
+    std::cout << "Presione Enter para continuar...";
+    std::getline(std::cin, titulo); 
+}
+
+void manejarEliminarCancion(ControladorReproductor& reproductor) {
+    limpiarPantalla();
+    std::string idStr;
+    std::cout << "--- Eliminar Cancion ---\n";
+    std::cout << "Ingrese el ID de la cancion a eliminar: ";
+    std::getline(std::cin, idStr);
+
+    try {
+        int id = std::stoi(idStr);
+        reproductor.eliminarCancionGlobal(id);
+        std::cout << "\nOperacion completada.\n";
+    } catch (...) {
+        std::cout << "\nError: ID invalido.\n";
+    }
+    std::cout << "Presione Enter para continuar...";
+    std::string pausa; std::getline(std::cin, pausa);
+}
+
 int main() {
     ListaDobleEnlazada<Cancion> registroCanciones;
     GestorArchivos::cargarFuenteMusica("music_source.txt", registroCanciones);
@@ -132,13 +180,15 @@ int main() {
     bool ejecutando = true;
     std::string entrada;
 
-    while (ejecutando) {
+while (ejecutando) {
         imprimirMenuPrincipal(reproductor);
-        std::cin >> entrada;
+        
+        std::getline(std::cin, entrada); 
+        if (entrada.empty()) continue;
         
         char comando = toupper(entrada[0]);
 
-   switch (comando) {
+        switch (comando) {
             case 'W': reproductor.alternarReproduccion(); break;
             case 'S': reproductor.alternarAleatorio(); break;
             case 'R': reproductor.ciclarModoRepeticion(); break;
@@ -146,6 +196,8 @@ int main() {
             case 'E': reproductor.reproducirSiguiente(); break;
             case 'A': manejarMenuLista(reproductor); break;
             case 'L': manejarMenuListadoGlobal(reproductor); break;
+            case 'N': manejarAgregarCancion(reproductor); break; 
+            case 'D': manejarEliminarCancion(reproductor); break; 
             case 'X': 
                 reproductor.guardarEstado();
                 ejecutando = false; 

@@ -46,3 +46,17 @@ void GestorArchivos::cargarFuenteMusica(const std::string& nombreArchivo, ListaD
     }
     archivo.close();
 }
+
+void GestorArchivos::guardarFuenteMusica(const std::string& nombreArchivo, ListaDobleEnlazada<Cancion>& listaCanciones) {
+    std::ofstream archivo(nombreArchivo);
+    if (!archivo.is_open()) return;
+
+    Nodo<Cancion>* actual = listaCanciones.getCabeza();
+    while (actual != nullptr) {
+        Cancion c = actual->dato;
+        archivo << c.getId() << "," << c.getTitulo() << "," << c.getArtista() << ","
+                << c.getAlbum() << "," << c.getAño() << "," << c.getDuracionSegundos() << "," << c.getRutaArchivo() << "\n";
+        actual = actual->siguiente;
+    }
+    archivo.close();
+}

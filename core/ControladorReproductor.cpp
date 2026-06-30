@@ -1,10 +1,10 @@
 #include "ControladorReproductor.h"
+#include "GestorArchivos.h" 
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
 #include <sstream>
-
 
 ControladorReproductor::ControladorReproductor(ListaDobleEnlazada<Cancion>* registro) {
     this->registroGlobal = registro;
@@ -27,6 +27,26 @@ Cancion ControladorReproductor::getCancionActual() const {
 
 ListaDobleEnlazada<Cancion>& ControladorReproductor::getListaActual() { return listaActual; }
 
+ListaDobleEnlazada<Cancion>* ControladorReproductor::getRegistroGlobal() const {
+    return registroGlobal;
+}
+
+void ControladorReproductor::agregarCancionGlobal(const Cancion& nuevaCancion) {
+    registroGlobal->agregarAlFinal(nuevaCancion);
+    GestorArchivos::guardarFuenteMusica("music_source.txt", *registroGlobal);
+}
+
+void ControladorReproductor::eliminarCancionGlobal(int id) {
+    if (registroGlobal->eliminarPorId(id)) {
+        listaActual.eliminarPorId(id);
+        if (tieneCancionActual() && nodoCancionActual->dato.getId() == id) {
+            nodoCancionActual = nullptr;
+            estaReproduciendo = false;
+        }
+        GestorArchivos::guardarFuenteMusica("music_source.txt", *registroGlobal);
+    }
+}
+
 void ControladorReproductor::alternarReproduccion() {
     if (!tieneCancionActual()) return; 
     estaReproduciendo = !estaReproduciendo;
@@ -46,7 +66,10 @@ void ControladorReproductor::ciclarModoRepeticion() {
 
 void ControladorReproductor::poblarListaAleatoria() {
     if (registroGlobal->estaVacia()) return;
-    listaActual.limpiar();
+    
+    int idActual = tieneCancionActual() ? nodoCancionActual->dato.getId() : -1;
+    
+    listaActual.limpiar(); 
 
     int totalCanciones = registroGlobal->getTamaño();
     Cancion* arregloTemporal = new Cancion[totalCanciones];
@@ -68,6 +91,19 @@ void ControladorReproductor::poblarListaAleatoria() {
         listaActual.agregarAlFinal(arregloTemporal[i]);
     }
     delete[] arregloTemporal;
+
+    if (idActual != -1) {
+        Nodo<Cancion>* temp = listaActual.getCabeza();
+        while (temp != nullptr) {
+            if (temp->dato.getId() == idActual) {
+                nodoCancionActual = temp;
+                break;
+            }
+            temp = temp->siguiente;
+        }
+    } else {
+        nodoCancionActual = listaActual.getCabeza();
+    }
 }
 
 void ControladorReproductor::reproducirSiguiente() {
@@ -78,17 +114,17 @@ void ControladorReproductor::reproducirSiguiente() {
     }
 
     if (listaActual.estaVacia()) {
-    poblarListaAleatoria();
-    nodoCancionActual = listaActual.getCabeza();
-    estaReproduciendo = true;
-    return;
+        poblarListaAleatoria();
+        nodoCancionActual = listaActual.getCabeza();
+        estaReproduciendo = true;
+        return;
     }
     
     if (nodoCancionActual != nullptr && nodoCancionActual->siguiente != nullptr) {
         nodoCancionActual = nodoCancionActual->siguiente;
         estaReproduciendo = true;
     } else {
-            if (modoRepeticion == REPETICION_TODAS) {
+        if (modoRepeticion == REPETICION_TODAS) {
             if (aleatorioActivado) poblarListaAleatoria();
             nodoCancionActual = listaActual.getCabeza();
             estaReproduciendo = true;
@@ -267,4 +303,3 @@ void ControladorReproductor::cargarEstado() {
     }
     archivo.close();
 }
-
