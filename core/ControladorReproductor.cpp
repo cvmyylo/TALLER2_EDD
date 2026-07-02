@@ -303,3 +303,23 @@ void ControladorReproductor::cargarEstado() {
     }
     archivo.close();
 }
+
+void ControladorReproductor::registrarReproduccionGlobal(int idCancion) {
+    Nodo<Cancion>* actual = registroGlobal->getCabeza();
+    while (actual != nullptr) {
+        if (actual->dato.getId() == idCancion) {
+            actual->dato.incrementarReproduccion();
+            GestorArchivos::guardarRankings("song_ranking.txt", *registroGlobal);
+            
+            Nodo<Cancion>* actualLista = listaActual.getCabeza();
+            while(actualLista != nullptr) {
+                if (actualLista->dato.getId() == idCancion) {
+                    actualLista->dato.incrementarReproduccion();
+                }
+                actualLista = actualLista->siguiente;
+            }
+            break;
+        }
+        actual = actual->siguiente;
+    }
+}

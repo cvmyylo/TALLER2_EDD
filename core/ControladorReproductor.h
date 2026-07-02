@@ -12,14 +12,14 @@ enum ModoRepeticion {
 
 class ControladorReproductor {
 private:
-    ListaDobleEnlazada<Cancion>* registroGlobal; 
-    ListaDobleEnlazada<Cancion> listaActual; 
-    Nodo<Cancion>* nodoCancionActual;            
-    
+    ListaDobleEnlazada<Cancion>* registroGlobal;
+    ListaDobleEnlazada<Cancion> listaActual;
+    Nodo<Cancion>* nodoCancionActual;
     bool estaReproduciendo;
     bool aleatorioActivado;
     ModoRepeticion modoRepeticion;
 
+    void registrarReproduccionGlobal(int idCancion); 
 
 public:
     ControladorReproductor(ListaDobleEnlazada<Cancion>* registro);
