@@ -9,6 +9,8 @@ class GestorArchivos {
 public:
     static void cargarFuenteMusica(const std::string& nombreArchivo, ListaDobleEnlazada<Cancion>& listaCanciones);
     static void guardarFuenteMusica(const std::string& nombreArchivo, ListaDobleEnlazada<Cancion>& listaCanciones);
+    
+    static void cargarRankings(const std::string& nombreArchivo, ListaDobleEnlazada<Cancion>& listaCanciones);
+    static void guardarRankings(const std::string& nombreArchivo, ListaDobleEnlazada<Cancion>& listaCanciones);
 };
-
 #endif

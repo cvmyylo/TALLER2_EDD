@@ -60,3 +60,43 @@ void GestorArchivos::guardarFuenteMusica(const std::string& nombreArchivo, Lista
     }
     archivo.close();
 }
+
+void GestorArchivos::cargarRankings(const std::string& nombreArchivo, ListaDobleEnlazada<Cancion>& listaCanciones) {
+    std::ifstream archivo(nombreArchivo);
+    if (!archivo.is_open()) return; 
+
+    std::string linea;
+    while (std::getline(archivo, linea)) {
+        std::stringstream ss(linea);
+        std::string idStr, cantStr;
+        if (std::getline(ss, idStr, ',') && std::getline(ss, cantStr)) {
+            int id = std::stoi(idStr);
+            int cant = std::stoi(cantStr);
+            
+            Nodo<Cancion>* actual = listaCanciones.getCabeza();
+            while (actual != nullptr) {
+                if (actual->dato.getId() == id) {
+                    actual->dato.setCantidadReproducciones(cant);
+                    break;
+                }
+                actual = actual->siguiente;
+            }
+        }
+    }
+    archivo.close();
+}
+
+void GestorArchivos::guardarRankings(const std::string& nombreArchivo, ListaDobleEnlazada<Cancion>& listaCanciones) {
+    std::ofstream archivo(nombreArchivo);
+    if (!archivo.is_open()) return;
+
+    Nodo<Cancion>* actual = listaCanciones.getCabeza();
+    while (actual != nullptr) {
+        
+        if (actual->dato.getCantidadReproducciones() > 0) {
+            archivo << actual->dato.getId() << "," << actual->dato.getCantidadReproducciones() << "\n";
+        }
+        actual = actual->siguiente;
+    }
+    archivo.close();
+}
