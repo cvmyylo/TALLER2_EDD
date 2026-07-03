@@ -48,9 +48,11 @@ void imprimirMenuPrincipal(ControladorReproductor& reproductor) {
     std::cout << "S - Activar/Desactivar modo aleatorio\n";
     std::cout << "R - Repeticion (Desactivado/Repetir una/Repetir todas)\n";
     std::cout << "A - Ver lista de reproduccion actual\n";
+    std::cout << "F - Buscar canciones y artistas\n"; 
+    std::cout << "T - TOP 10 Artistas y Canciones\n"; 
     std::cout << "L - Listado de canciones\n";
-    std::cout << "N - Agregar nueva cancion\n"; // <--- AGREGAR ESTO
-    std::cout << "D - Eliminar cancion\n";      // <--- AGREGAR ESTO
+    std::cout << "N - Agregar nueva cancion\n"; 
+    std::cout << "D - Eliminar cancion\n";      
     std::cout << "X - Salir\n";
     std::cout << "\nIngrese Opcion: ";
 }
@@ -68,7 +70,8 @@ void manejarMenuLista(ControladorReproductor& reproductor) {
         std::cout << "V - Volver al menu principal\n";
         std::cout << "\nIngrese Opcion: ";
         
-        std::cin >> entrada;
+        std::getline(std::cin, entrada);
+        if (entrada.empty()) continue;
         char comando = toupper(entrada[0]);
         if (comando == 'V') {
             enSubmenu = false; 
@@ -98,7 +101,8 @@ void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
         std::cout << "V - Volver al menu principal\n";
         std::cout << "\nIngrese Opcion: ";
         
-        std::cin >> entrada;
+        std::getline(std::cin, entrada);
+        if (entrada.empty()) continue;
         char comando = toupper(entrada[0]);
 
         if (comando == 'V') {
@@ -150,7 +154,7 @@ void manejarAgregarCancion(ControladorReproductor& reproductor) {
         std::cout << "\nError: Datos numericos invalidos. No se guardo la cancion.\n";
     }
     std::cout << "Presione Enter para continuar...";
-    std::getline(std::cin, titulo); 
+    std::string pausa; std::getline(std::cin, pausa); 
 }
 
 void manejarEliminarCancion(ControladorReproductor& reproductor) {
@@ -171,9 +175,26 @@ void manejarEliminarCancion(ControladorReproductor& reproductor) {
     std::string pausa; std::getline(std::cin, pausa);
 }
 
+void manejarMenuBusqueda(ControladorReproductor& reproductor) {
+    limpiarPantalla();
+    std::cout << "--- Busqueda de Canciones y Artistas ---\n";
+    std::cout << "(en construccion vicente cardenas)\n"; // en construccion
+    std::cout << "Presione Enter para volver...";
+    std::string pausa; std::getline(std::cin, pausa);
+}
+
+void manejarMenuTop(ControladorReproductor& reproductor) {
+    limpiarPantalla();
+    std::cout << "--- Ranking TOP 10 ---\n";
+    std::cout << "(en construccion vicente rojas)\n"; // en construccion
+    std::cout << "Presione Enter para volver...";
+    std::string pausa; std::getline(std::cin, pausa);
+}
+
 int main() {
     ListaDobleEnlazada<Cancion> registroCanciones;
     GestorArchivos::cargarFuenteMusica("music_source.txt", registroCanciones);
+    GestorArchivos::cargarRankings("song_ranking.txt", registroCanciones); 
     ControladorReproductor reproductor(&registroCanciones);
     reproductor.cargarEstado();
 
@@ -196,6 +217,8 @@ while (ejecutando) {
             case 'E': reproductor.reproducirSiguiente(); break;
             case 'A': manejarMenuLista(reproductor); break;
             case 'L': manejarMenuListadoGlobal(reproductor); break;
+            case 'F': manejarMenuBusqueda(reproductor); break; 
+            case 'T': manejarMenuTop(reproductor); break;           
             case 'N': manejarAgregarCancion(reproductor); break; 
             case 'D': manejarEliminarCancion(reproductor); break; 
             case 'X': 
