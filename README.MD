@@ -95,7 +95,7 @@ Para compilar el proyecto en un entorno basado en Unix (Mac/Linux), abre la term
 Una vez compilado sin errores, inicia el reproductor con el comando de debajo:
 
 ```bash
-g++ main.cpp classes/Cancion.cpp core/GestorArchivos.cpp core/ControladorReproductor.cpp -o reproductor -std=c++14
+g++ main.cpp data_structures/MaxHeapCanciones.cpp data_structures/MaxHeapArtistas.cpp classes/Cancion.cpp core/ControladorReproductor.cpp core/GestorArchivos.cpp data_structures/Nodo.cpp data_structures/ListaDobleEnlazada.cpp -o reproductor
 
 ./reproductor
 ```
