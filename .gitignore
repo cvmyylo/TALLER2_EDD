@@ -10,3 +10,8 @@
 .idea/
 .vscode/
 cmake-build-debug/
+
+echo "reproductor" > .gitignore
+echo "*.o" >> .gitignore
+echo "status.cfg" >> .gitignore
+echo "song_ranking.txt" >> .gitignore
