@@ -9,20 +9,20 @@ private:
     std::string titulo;
     std::string artista;
     std::string album;
-    int año;
+    int ano;
     int duracionSegundos;
     std::string rutaArchivo;
     int cantidadReproducciones; 
 
 public:
     Cancion();
-    Cancion(int id, std::string titulo, std::string artista, std::string album, int año, int duracionSegundos, std::string rutaArchivo);
+    Cancion(int id, std::string titulo, std::string artista, std::string album, int ano, int duracionSegundos, std::string rutaArchivo);
 
     int getId() const;
     std::string getTitulo() const;
     std::string getArtista() const;
     std::string getAlbum() const;
-    int getAño() const;
+    int getAno() const;
     int getDuracionSegundos() const;
     std::string getRutaArchivo() const;
     int getCantidadReproducciones() const;

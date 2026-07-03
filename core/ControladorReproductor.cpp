@@ -71,7 +71,7 @@ void ControladorReproductor::poblarListaAleatoria() {
     
     listaActual.limpiar(); 
 
-    int totalCanciones = registroGlobal->getTamaño();
+    int totalCanciones = registroGlobal->getTamano();
     Cancion* arregloTemporal = new Cancion[totalCanciones];
     
     Nodo<Cancion>* actual = registroGlobal->getCabeza();

@@ -8,7 +8,7 @@ class ListaDobleEnlazada {
 private:
     Nodo<T>* cabeza;
     Nodo<T>* cola;
-    int tamaño;
+    int tamano;
 
 public:
     ListaDobleEnlazada();
@@ -18,7 +18,7 @@ public:
     void limpiar();
     bool eliminarPorId(int idObjetivo); 
 
-    int getTamaño() const;
+    int getTamano() const;
     bool estaVacia() const;
     Nodo<T>* getCabeza() const;
 };
