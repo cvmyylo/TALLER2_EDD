@@ -23,22 +23,22 @@ void GestorArchivos::cargarFuenteMusica(const std::string& nombreArchivo, ListaD
         if (linea.empty()) continue;
 
         std::stringstream ss(linea);
-        std::string idStr, titulo, artista, album, añoStr, durStr, ruta;
+        std::string idStr, titulo, artista, album, anoStr, durStr, ruta;
 
         std::getline(ss, idStr, ',');
         std::getline(ss, titulo, ',');
         std::getline(ss, artista, ',');
         std::getline(ss, album, ',');
-        std::getline(ss, añoStr, ',');
+        std::getline(ss, anoStr, ',');
         std::getline(ss, durStr, ',');
         std::getline(ss, ruta, ',');
 
         try {
             int id = std::stoi(limpiarEspacios(idStr));
-            int año = std::stoi(limpiarEspacios(añoStr));
+            int ano = std::stoi(limpiarEspacios(anoStr));
             int duracion = std::stoi(limpiarEspacios(durStr));
 
-            Cancion nuevaCancion(id, limpiarEspacios(titulo), limpiarEspacios(artista), limpiarEspacios(album), año, duracion, limpiarEspacios(ruta));
+            Cancion nuevaCancion(id, limpiarEspacios(titulo), limpiarEspacios(artista), limpiarEspacios(album), ano, duracion, limpiarEspacios(ruta));
             listaCanciones.agregarAlFinal(nuevaCancion);
         } catch (const std::exception& e) {
             std::cerr << "Error al procesar la linea: " << linea << "\n";
@@ -55,7 +55,7 @@ void GestorArchivos::guardarFuenteMusica(const std::string& nombreArchivo, Lista
     while (actual != nullptr) {
         Cancion c = actual->dato;
         archivo << c.getId() << "," << c.getTitulo() << "," << c.getArtista() << ","
-                << c.getAlbum() << "," << c.getAño() << "," << c.getDuracionSegundos() << "," << c.getRutaArchivo() << "\n";
+                << c.getAlbum() << "," << c.getAno() << "," << c.getDuracionSegundos() << "," << c.getRutaArchivo() << "\n";
         actual = actual->siguiente;
     }
     archivo.close();

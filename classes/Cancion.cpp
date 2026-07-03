@@ -5,18 +5,18 @@ Cancion::Cancion() {
     this->titulo = "";
     this->artista = "";
     this->album = "";
-    this->año = 0;
+    this->ano = 0;
     this->duracionSegundos = 0;
     this->rutaArchivo = "";
     this->cantidadReproducciones = 0; 
 }
 
-Cancion::Cancion(int id, std::string titulo, std::string artista, std::string album, int año, int duracionSegundos, std::string rutaArchivo) {
+Cancion::Cancion(int id, std::string titulo, std::string artista, std::string album, int ano, int duracionSegundos, std::string rutaArchivo) {
     this->id = id;
     this->titulo = titulo;
     this->artista = artista;
     this->album = album;
-    this->año = año;
+    this->ano = ano;
     this->duracionSegundos = duracionSegundos;
     this->rutaArchivo = rutaArchivo;
     this->cantidadReproducciones = 0; 
@@ -26,7 +26,7 @@ int Cancion::getId() const { return id; }
 std::string Cancion::getTitulo() const { return titulo; }
 std::string Cancion::getArtista() const { return artista; }
 std::string Cancion::getAlbum() const { return album; }
-int Cancion::getAño() const { return año; }
+int Cancion::getAno() const { return ano; }
 int Cancion::getDuracionSegundos() const { return duracionSegundos; }
 std::string Cancion::getRutaArchivo() const { return rutaArchivo; }
 

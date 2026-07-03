@@ -3,7 +3,7 @@
 #include "ListaDobleEnlazada.h"
 
 template <class T>
-ListaDobleEnlazada<T>::ListaDobleEnlazada() : cabeza(nullptr), cola(nullptr), tamaño(0) {}
+ListaDobleEnlazada<T>::ListaDobleEnlazada() : cabeza(nullptr), cola(nullptr), tamano(0) {}
 
 template <class T>
 ListaDobleEnlazada<T>::~ListaDobleEnlazada() { limpiar(); }
@@ -18,7 +18,7 @@ void ListaDobleEnlazada<T>::agregarAlFinal(T dato) {
         nuevoNodo->anterior = cola;
         cola = nuevoNodo;
     }
-    tamaño++;
+    tamano++;
 }
 
 template <class T>
@@ -31,7 +31,7 @@ void ListaDobleEnlazada<T>::limpiar() {
     }
     cabeza = nullptr;
     cola = nullptr;
-    tamaño = 0;
+    tamano = 0;
 }
 
 template <class T>
@@ -46,7 +46,7 @@ bool ListaDobleEnlazada<T>::eliminarPorId(int idObjetivo) {
             else cola = actual->anterior; 
             
             delete actual;
-            tamaño--;
+            tamano--;
             return true;
         }
         actual = actual->siguiente;
@@ -55,10 +55,10 @@ bool ListaDobleEnlazada<T>::eliminarPorId(int idObjetivo) {
 }
 
 template <class T>
-int ListaDobleEnlazada<T>::getTamaño() const { return tamaño; }
+int ListaDobleEnlazada<T>::getTamano() const { return tamano; }
 
 template <class T>
-bool ListaDobleEnlazada<T>::estaVacia() const { return tamaño == 0; }
+bool ListaDobleEnlazada<T>::estaVacia() const { return tamano == 0; }
 
 template <class T>
 Nodo<T>* ListaDobleEnlazada<T>::getCabeza() const { return cabeza; }

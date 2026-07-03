@@ -6,6 +6,14 @@
 #include "data_structures/ListaDobleEnlazada.h"
 #include "core/GestorArchivos.h"
 #include "core/ControladorReproductor.h"
+#include "data_structures/MaxHeapCanciones.h"
+#include "data_structures/MaxHeapArtistas.h"
+
+// Prototipos para que C++ no se queje del orden de las funciones
+struct ArtistaStats; // Declaración adelantada del struct por si acaso
+void mostrarTopCanciones(ControladorReproductor& reproductor);
+void mostrarTopArtistas(ControladorReproductor& reproductor);
+void mostrarCancionesArtista(ControladorReproductor& reproductor, ArtistaStats* artista);
 
 void limpiarPantalla() {
     system("clear"); //"clear" ya que uso MacOS
@@ -36,7 +44,7 @@ void imprimirMenuPrincipal(ControladorReproductor& reproductor) {
         Cancion actual = reproductor.getCancionActual();
         std::cout << textoEstado << " " << modificadores << ": " << actual.getTitulo() << "\n";
         std::cout << "Artista: " << actual.getArtista() << "\n";
-        std::cout << "Album: " << actual.getAlbum() << " [" << actual.getAño() << "]\n";
+        std::cout << "Album: " << actual.getAlbum() << " [" << actual.getAno() << "]\n";
     } else {
         std::cout << textoEstado << "\n"; 
     }
@@ -131,22 +139,22 @@ void manejarMenuListadoGlobal(ControladorReproductor& reproductor) {
 
 void manejarAgregarCancion(ControladorReproductor& reproductor) {
     limpiarPantalla();
-    std::string titulo, artista, album, añoStr, duracionStr, ruta;
+    std::string titulo, artista, album, anoStr, duracionStr, ruta;
     
     std::cout << "--- Agregar Nueva Cancion ---\n";
     std::cout << "Titulo: "; std::getline(std::cin, titulo);
     std::cout << "Artista: "; std::getline(std::cin, artista);
     std::cout << "Album: "; std::getline(std::cin, album);
-    std::cout << "Año: "; std::getline(std::cin, añoStr);
+    std::cout << "Ano: "; std::getline(std::cin, anoStr);
     std::cout << "Duracion (segundos): "; std::getline(std::cin, duracionStr);
     std::cout << "Ruta del archivo: "; std::getline(std::cin, ruta);
 
     try {
-        int año = std::stoi(añoStr);
+        int ano = std::stoi(anoStr);
         int duracion = std::stoi(duracionStr);
         
-        int nuevoId = reproductor.getRegistroGlobal()->getTamaño() + 1;
-        Cancion nueva(nuevoId, titulo, artista, album, año, duracion, ruta);
+        int nuevoId = reproductor.getRegistroGlobal()->getTamano() + 1;
+        Cancion nueva(nuevoId, titulo, artista, album, ano, duracion, ruta);
         
         reproductor.agregarCancionGlobal(nueva);
         std::cout << "\nCancion agregada y guardada exitosamente.\n";
@@ -183,12 +191,251 @@ void manejarMenuBusqueda(ControladorReproductor& reproductor) {
     std::string pausa; std::getline(std::cin, pausa);
 }
 
+
+
+void insertarOrdenadoAlfabetico(ListaDobleEnlazada<Cancion*>& lista, Cancion* nueva) {
+    lista.agregarAlFinal(nueva);
+}
+
+void mostrarTopCanciones(ControladorReproductor& reproductor) {
+    bool enSubmenu = true;
+    std::string entrada;
+
+    while (enSubmenu) {
+        limpiarPantalla();
+        int totalCanciones = reproductor.getRegistroGlobal()->getTamano();
+        
+        // 1. Construir Max Heap
+        MaxHeapCanciones heap(totalCanciones);
+        Nodo<Cancion>* cursor = reproductor.getRegistroGlobal()->getCabeza();
+        while (cursor != nullptr) {
+            Cancion* c = &(cursor->dato);
+            heap.insertar(c);
+            cursor = cursor->siguiente;
+        }
+
+        // 2. Extraer Top 10 (o Top N)
+        int mostrar = (totalCanciones < 10) ? totalCanciones : 10;
+        Cancion* top10[10]; // Arreglo estático para guardar los punteros extraídos
+
+        std::cout << "Ranking TOP " << mostrar << " Canciones mas escuchadas:\n";
+        for (int i = 0; i < mostrar; i++) {
+            top10[i] = heap.extraerMaximo();
+            int reprod = top10[i]->getCantidadReproducciones();
+            std::string padding = (reprod < 10) ? " " : "";             
+            std::cout << i + 1 << ". [" << padding << reprod << "] " 
+                      << top10[i]->getTitulo() << " - " << top10[i]->getArtista() << "\n";
+        }
+
+        std::cout << "\nOpciones:\n";
+        std::cout << "R<num> - Reproducir cancion seleccionada\n";
+        std::cout << "A<num> - Agregar cancion seleccionada al final de la lista de reproduccion actual\n";
+        std::cout << "A - Top 10 artistas mas escuchados\n";
+        std::cout << "V - Volver al menu principal\n";
+        std::cout << "Ingrese Opcion: ";
+
+        std::getline(std::cin, entrada);
+        if (entrada.empty()) continue;
+        char cmd = toupper(entrada[0]);
+
+        if (cmd == 'V') {
+            enSubmenu = false;
+        } else if (cmd == 'A' && entrada.length() == 1) {
+            mostrarTopArtistas(reproductor); 
+            enSubmenu = false; // Al volver del artista, volvemos al menú principal
+        } else if ((cmd == 'R' || cmd == 'A') && entrada.length() > 1) {
+            try {
+                int num = std::stoi(entrada.substr(1));
+                if (num > 0 && num <= mostrar) {
+                    int idCancion = top10[num - 1]->getId();
+                    if (cmd == 'R') {
+                        reproductor.reproducirDesdeGlobal(idCancion);
+                    } else {
+                        reproductor.encolarDesdeGlobal(idCancion);
+                    }
+                }
+            } catch (...) {}
+        }
+    }
+}
+
+void mostrarTopArtistas(ControladorReproductor& reproductor) {
+    bool enSubmenu = true;
+    std::string entrada;
+
+    
+    int totalCanciones = reproductor.getRegistroGlobal()->getTamano();
+    ListaDobleEnlazada<ArtistaStats*> listaArtistas;
+
+    Nodo<Cancion>* cursor = reproductor.getRegistroGlobal()->getCabeza();
+    while (cursor != nullptr) {
+        Cancion* c = &(cursor->dato);
+        std::string nombreArt = c->getArtista();
+        
+       
+        bool encontrado = false;
+        Nodo<ArtistaStats*>* cursorArt = listaArtistas.getCabeza();
+        while (cursorArt != nullptr) {
+            if (cursorArt->dato->nombre == nombreArt) {
+                cursorArt->dato->totalReproducciones += c->getCantidadReproducciones();
+                insertarOrdenadoAlfabetico(cursorArt->dato->cancionesDelArtista, c);
+                encontrado = true;
+                break;
+            }
+            cursorArt = cursorArt->siguiente;
+        }
+
+        // Si es nuevo, lo creamos
+        if (!encontrado) {
+            ArtistaStats* nuevoArt = new ArtistaStats(nombreArt);
+            nuevoArt->totalReproducciones += c->getCantidadReproducciones();
+            insertarOrdenadoAlfabetico(nuevoArt->cancionesDelArtista, c);
+            listaArtistas.agregarAlFinal(nuevoArt);
+        }
+        cursor = cursor->siguiente;
+    }
+
+    while (enSubmenu) {
+        limpiarPantalla();
+        
+        // 2. Construir Max Heap
+        int cantArtistas = listaArtistas.getTamano();
+        MaxHeapArtistas heap(cantArtistas);
+        
+        Nodo<ArtistaStats*>* rec = listaArtistas.getCabeza();
+        while (rec != nullptr) {
+            heap.insertar(rec->dato);
+            rec = rec->siguiente;
+        }
+
+        // 3. Extraer Top 10
+        int mostrar = (cantArtistas < 10) ? cantArtistas : 10;
+        ArtistaStats* top10[10];
+
+        std::cout << "Ranking TOP " << mostrar << " Artistas mas escuchados:\n";
+        for (int i = 0; i < mostrar; i++) {
+            top10[i] = heap.extraerMaximo();
+            int reprod = top10[i]->totalReproducciones;
+            std::string padding = (reprod < 10) ? " " : "";
+            std::cout << i + 1 << ". [" << padding << reprod << "] " << top10[i]->nombre << "\n";
+        }
+
+        std::cout << "\nOpciones:\n";
+        std::cout << "S<num> - Mostrar canciones del artista\n";
+        std::cout << "C - Top 10 canciones mas escuchadas\n";
+        std::cout << "V - Volver al menu principal\n";
+        std::cout << "Ingrese Opcion: ";
+
+        std::getline(std::cin, entrada);
+        if (entrada.empty()) continue;
+        char cmd = toupper(entrada[0]);
+
+        if (cmd == 'V') {
+            enSubmenu = false;
+        } else if (cmd == 'C') {
+            mostrarTopCanciones(reproductor);
+            enSubmenu = false;
+        } else if (cmd == 'S' && entrada.length() > 1) {
+            try {
+                int num = std::stoi(entrada.substr(1));
+                if (num > 0 && num <= mostrar) {
+                    mostrarCancionesArtista(reproductor, top10[num - 1]);
+                }
+            } catch (...) {}
+        }
+    }
+
+   
+    Nodo<ArtistaStats*>* curr = listaArtistas.getCabeza();
+    while (curr != nullptr) {
+        delete curr->dato;
+        curr = curr->siguiente;
+    }
+}
+
+void mostrarCancionesArtista(ControladorReproductor& reproductor, ArtistaStats* artista) {
+    bool enSubmenu = true;
+    std::string entrada;
+
+    while(enSubmenu) {
+        limpiarPantalla();
+        int cantCanciones = artista->cancionesDelArtista.getTamano();
+        Cancion** arregloCanciones = new Cancion*[cantCanciones]; // Para acceder por índice rápido
+
+        std::cout << "Ranking TOP 10 Artistas mas escuchados:\n";
+        std::cout << "Artista: " << artista->nombre << "\n";
+        
+        Nodo<Cancion*>* cursor = artista->cancionesDelArtista.getCabeza();
+        int i = 0;
+        while (cursor != nullptr) {
+            arregloCanciones[i] = cursor->dato;
+            std::cout << i + 1 << ". " << arregloCanciones[i]->getTitulo() << "\n";
+            cursor = cursor->siguiente;
+            i++;
+        }
+
+        std::cout << "\nOpciones:\n";
+        std::cout << "R<num> - Reproducir cancion seleccionada\n";
+        std::cout << "A<num> - Agregar cancion seleccionada al final de la lista de reproduccion actual\n";
+        std::cout << "V - Volver al listado de TOP 10 artistas\n";
+        std::cout << "X - Volver al menu principal\n";
+        std::cout << "Ingrese Opcion: ";
+
+        std::getline(std::cin, entrada);
+        if (entrada.empty()) {
+            delete[] arregloCanciones;
+            continue;
+        }
+        
+        char cmd = toupper(entrada[0]);
+
+        if (cmd == 'V') {
+            enSubmenu = false;
+        } else if (cmd == 'X') {
+           
+            enSubmenu = false;
+        } else if ((cmd == 'R' || cmd == 'A') && entrada.length() > 1) {
+            try {
+                int num = std::stoi(entrada.substr(1));
+                if (num > 0 && num <= cantCanciones) {
+                    int idCancion = arregloCanciones[num - 1]->getId();
+                    if (cmd == 'R') {
+                        reproductor.reproducirDesdeGlobal(idCancion);
+                        enSubmenu = false; 
+                    } else {
+                        reproductor.encolarDesdeGlobal(idCancion);
+                    }
+                }
+            } catch (...) {}
+        }
+        delete[] arregloCanciones;
+    }
+}
+
 void manejarMenuTop(ControladorReproductor& reproductor) {
-    limpiarPantalla();
-    std::cout << "--- Ranking TOP 10 ---\n";
-    std::cout << "(en construccion vicente rojas)\n"; // en construccion
-    std::cout << "Presione Enter para volver...";
-    std::string pausa; std::getline(std::cin, pausa);
+    bool enSubmenu = true;
+    std::string entrada;
+
+    while (enSubmenu) {
+        limpiarPantalla();
+        std::cout << "Ranking TOP\n";
+        std::cout << "C - Top 10 canciones mas escuchadas\n";
+        std::cout << "A - Top 10 artistas mas escuchados\n";
+        std::cout << "X - Salir\n";
+        std::cout << "Ingrese Opcion: ";
+
+        std::getline(std::cin, entrada);
+        if (entrada.empty()) continue;
+        char comando = toupper(entrada[0]);
+
+        if (comando == 'X') {
+            enSubmenu = false;
+        } else if (comando == 'C') {
+            mostrarTopCanciones(reproductor);
+        } else if (comando == 'A') {
+            mostrarTopArtistas(reproductor);
+        }
+    }
 }
 
 int main() {
@@ -218,7 +465,7 @@ while (ejecutando) {
             case 'A': manejarMenuLista(reproductor); break;
             case 'L': manejarMenuListadoGlobal(reproductor); break;
             case 'F': manejarMenuBusqueda(reproductor); break; 
-            case 'T': manejarMenuTop(reproductor); break;           
+            case 'T': manejarMenuTop(reproductor); break;  
             case 'N': manejarAgregarCancion(reproductor); break; 
             case 'D': manejarEliminarCancion(reproductor); break; 
             case 'X': 
