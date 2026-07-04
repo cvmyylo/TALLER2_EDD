@@ -2,7 +2,7 @@
 
 **Integrantes del Equipo:** 
 
-Camilo Montalván  (Integración, Persistencia de Datos y Controlador) @cvmyylo
+Camilo Montalván  (Integración de funciones y estructuras de datos en el Main, Persistencia de Datos y Controlador) @cvmyylo
 
 Vicente Cárdenas (Estructuras de Búsqueda - Árbol Trie) @DarthDipper
 
