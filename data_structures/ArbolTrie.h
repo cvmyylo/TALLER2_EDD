@@ -16,6 +16,9 @@ private:
     NodoTrie* raiz;
     void insertarCadena(const std::string& texto, Cancion* cancion);
     void insertarSufijos(const std::string& texto, Cancion* cancion);
+    bool existeEnLista(ListaDobleEnlazada<Cancion*>& lista, Cancion* cancion);
+    void destruir(NodoTrie* nodo);
+    std::string convertirMinusculas(const std::string& texto);
 public:
     ArbolTrie();
     ~ArbolTrie();
