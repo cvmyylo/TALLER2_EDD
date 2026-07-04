@@ -34,3 +34,14 @@ void ArbolTrie::insertarCancion(Cancion* cancion){
     insertarSufijos(cancion->getTitulo(),cancion);
     insertarSufijos(cancion->getArtista(),cancion);
 }
+ListaDobleEnlazada<Cancion*> ArbolTrie::buscar(const std::string& texto){
+    ListaDobleEnlazada<Cancion*> vacia;
+    NodoTrie* actual=raiz;
+    for(unsigned int i=0;i<texto.length();i++){
+        unsigned char indice=(unsigned char)texto[i];
+        if(actual->hijos[indice]==nullptr)
+            return vacia;
+        actual=actual->hijos[indice];
+    }
+    return actual->canciones;
+}
