@@ -292,7 +292,7 @@ void mostrarTopArtistas(ControladorReproductor& reproductor) {
     std::string entrada;
 
     
-    int totalCanciones = reproductor.getRegistroGlobal()->getTamano();
+ //   int totalCanciones = reproductor.getRegistroGlobal()->getTamano();
     ListaDobleEnlazada<ArtistaStats*> listaArtistas;
 
     Nodo<Cancion>* cursor = reproductor.getRegistroGlobal()->getCabeza();

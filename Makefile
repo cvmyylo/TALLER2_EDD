@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall
 
-SRCS = main.cpp classes/Cancion.cpp core/GestorArchivos.cpp core/ControladorReproductor.cpp
+SRCS = main.cpp $(wildcard classes/*.cpp) $(wildcard core/*.cpp) $(wildcard data_structures/*.cpp)
 OBJS = $(SRCS:.cpp=.o)
 TARGET = reproductor
 

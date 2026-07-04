@@ -1,16 +1,19 @@
-# Reproductor de Música - Taller 1 EDD
+# Reproductor de Música Avanzado (C++) - Taller 2 EDD
 
-**Autor:** Camilo Montalván Aguirre
+**Integrantes del Equipo:** 
+Camilo Montalván  (Integración, Persistencia de Datos y Controlador)
 
-**Colaborador 2** Vicente Cárdenas Romero
+Vicente Cárdenas (Estructuras de Búsqueda - Árbol Trie)
+
+Vicente Rojas (Estructuras de Ranking - Árboles Heap y AVL)
 
 ## Descripción del Proyecto
-Este proyecto es un reproductor de música interactivo basado en consola, desarrollado en C++. Implementa la gestión de una lista de reproducción y un registro global de canciones utilizando una lista doblemente enlazada.
+Este proyecto es la segunda iteración de un reproductor de música interactivo en consola desarrollado en C++. Extiende la versión base incorporando estructuras de datos arbóreas avanzadas (Trie, Max-Heap y AVL) construidas desde cero sin uso de la STL. Estas estructuras permiten búsquedas ultrarrápidas de strings por subcadenas y generación de rankings (Top 10) en tiempo real, manteniendo la persistencia del estado y el conteo de reproducciones entre sesiones.
 
 ## Estructura y Arquitectura
 El proyecto está modularizado para mantener un código limpio y escalable:
 *   `classes/`: Contiene el modelo de datos (`Cancion`).
-*   `data_structures/`: Contiene la implementación manual de los nodos (`Nodo.h`) y la estructura de datos principal (`ListaDobleEnlazada.h`).
+*   `data_structures/`: Contiene la implementación manual de los nodos (`Nodo`) y la estructuras de datos definidas como (`ArbolTrie`), (`ListaDobleEnlazada`), (`MaxHeapArtistas`) y (`MaxHeapCanciones`).
 *   `core/`: Contiene la lógica de negocio (`GestorArchivos` para la lectura del TXT y `ControladorReproductor` para la lógica de reproducción y persistencia).
 *   `music_source.txt`: Base de datos inicial con el listado de canciones disponibles.
 *   `status.cfg`: Archivo generado automáticamente para guardar el estado de la reproducción entre sesiones.
@@ -18,98 +21,46 @@ El proyecto está modularizado para mantener un código limpio y escalable:
 Funcionalidades Implementadas
 * `W`: Reproducir / Pausar.
 
-* `Q / E`: Navegación (Pista anterior / Pista siguiente). Maneja automáticamente la creación de listas aleatorias si la cola está vacía.
+* `Q / E`: Saltar a pista Anterior / Siguiente.
 
-* `S`: Activar / Desactivar modo aleatorio.
+* `S / R`: Control de modo Aleatorio y modos de Repetición (Una/Todas).
 
-* `R`: Ciclar modos de repetición (Desactivado -> Repetir Una -> Repetir Todas).
+* `A`: Ver la cola de la lista de reproducción actual.
 
-* `A`: Submenú de la lista de reproducción actual (permite visualizar la cola y saltar a pistas específicas con S<num>).
+* `L`: Ver la biblioteca global completa.
 
-* `L`: Submenú del registro global (permite ver todas las canciones, reproducir inmediatamente con R<num> o encolar con A<num>).
+* `N / D`: Agregar una nueva canción al sistema o Eliminarla por ID.
 
-* `X`: Salir del programa guardando el estado actual (status.cfg). Al volver a ejecutar, el reproductor retomará exactamente donde quedó.
+* `F`: Búsqueda inteligente de canciones o artistas mediante la inserción de texto. Utiliza un Árbol Trie para buscar coincidencias por subcadena de forma eficiente.
 
-## Diagrama de Clases (UML)
+* `T`: Visualización de Rankings. Emplea árboles Max-Heap para extraer en orden de mayor a menor las 10 canciones y los 10 artistas más escuchados. Las canciones de cada artista se mantienen en estricto orden alfabético usando un Árbol AVL.
 
-```mermaid
-classDiagram
-    class Cancion {
-        -int id
-        -string titulo
-        -string artista
-        -string album
-        -int anio
-        -int duracionSegundos
-        -string rutaArchivo
-        +getId() int
-        +getTitulo() string
-        +getArtista() string
-        +getStringMostrar() string
-    }
+* `X`: Guarda la sesión actual (status.cfg) y los contadores de reproducciones (song_ranking.txt).
 
-    class Nodo~T~ {
-        +T dato
-        +Nodo~T~* siguiente
-        +Nodo~T~* anterior
-    }
+## Arquitectura y Diagrama de Clases (UML)
 
-    class ListaDobleEnlazada~T~ {
-        -Nodo~T~* cabeza
-        -Nodo~T~* cola
-        -int tamano
-        +agregarAlFinal(T dato)
-        +limpiar()
-        +getTamano() int
-        +estaVacia() bool
-    }
+A continuación se detalla la arquitectura del sistema en una imagen de un diagrama de clases UML.
 
-    class GestorArchivos {
-        +cargarFuenteMusica(string, ListaDobleEnlazada~Cancion~&) static
-    }
-
-    class ControladorReproductor {
-        -ListaDobleEnlazada~Cancion~* registroGlobal
-        -ListaDobleEnlazada~Cancion~ listaActual
-        -Nodo~Cancion~* nodoCancionActual
-        -bool estaReproduciendo
-        -bool aleatorioActivado
-        -ModoRepeticion modoRepeticion
-        +alternarReproduccion()
-        +reproducirSiguiente()
-        +reproducirAnterior()
-        +saltarACancion(int)
-        +guardarEstado()
-        +cargarEstado()
-    }
-
-    Nodo "1" *-- "1" Nodo : punteros sig/ant
-    ListaDobleEnlazada "1" *-- "0..*" Nodo : contiene
-    ControladorReproductor "1" o-- "1" ListaDobleEnlazada : gestiona listaActual
-    ControladorReproductor "1" -- "1" ListaDobleEnlazada : referencia registroGlobal
-    GestorArchivos ..> ListaDobleEnlazada : puebla
-    GestorArchivos ..> Cancion : crea
-```
+![Diagrama de Clases UML del Reproductor](diagrama_clases.png)
 
 ## Instrucciones de Compilación y Ejecución
-Para compilar el proyecto en un entorno basado en Unix (Mac/Linux), abre la terminal en la carpeta raíz del proyecto y ejecuta el siguiente comando:
+Para compilar en Windows, se recomienda utilizar Git Bash, el terminal integrado de VS Code, o tener un entorno como MinGW/MSYS2 configurado en las variables de entorno.
 
-Una vez compilado sin errores, inicia el reproductor con el comando de debajo:
+1. Abre tu terminal en la raíz del proyecto.
+
+2. Ejecuta el comando de limpieza por seguridad:
+make clean
+(Nota: Si utilizas MinGW en CMD clásico, es posible que el comando que debas usar sea mingw32-make clean)
+
+3. Compila el proyecto completo:
+make
+
+4. Ejecuta el reproductor generado:
+reproductor.exe
+(O ./reproductor.exe si te encuentras utilizando Git Bash)
 
 ```bash
-g++ main.cpp data_structures/MaxHeapCanciones.cpp data_structures/MaxHeapArtistas.cpp classes/Cancion.cpp core/ControladorReproductor.cpp core/GestorArchivos.cpp data_structures/Nodo.cpp data_structures/ListaDobleEnlazada.cpp -o reproductor
-
-./reproductor
+make clean 
+make
+./reproductor.exe
 ```
-
-## Reinicio del Estado y Arranque en frio
-
-El reproductor guarda automáticamente tu última sesión en un archivo físico llamado `status.cfg` cada vez que utilizas la opción **X - Salir**. 
-
-Si deseas probar el programa desde cero y borrar la lista de reproducción y los estados guardados, debes eliminar este archivo antes de ejecutar el reproductor. Puedes hacerlo rápidamente ejecutando el siguiente comando en tu consola:
-
-```bash
-rm status.cfg
-```
-
-
