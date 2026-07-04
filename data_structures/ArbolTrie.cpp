@@ -26,3 +26,7 @@ void ArbolTrie::insertarCadena(const std::string& texto,Cancion* cancion){
     }
     actual->finPalabra=true;
 }
+void ArbolTrie::insertarSufijos(const std::string& texto,Cancion* cancion){
+    for(unsigned int i=0;i<texto.length();i++)
+        insertarCadena(texto.substr(i),cancion);
+}
