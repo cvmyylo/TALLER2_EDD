@@ -1,11 +1,12 @@
 # Reproductor de Música Avanzado (C++) - Taller 2 EDD
 
 **Integrantes del Equipo:** 
-Camilo Montalván  (Integración, Persistencia de Datos y Controlador)
 
-Vicente Cárdenas (Estructuras de Búsqueda - Árbol Trie)
+Camilo Montalván  (Integración, Persistencia de Datos y Controlador) @cvmyylo
 
-Vicente Rojas (Estructuras de Ranking - Árboles Heap y AVL)
+Vicente Cárdenas (Estructuras de Búsqueda - Árbol Trie) @DarthDipper
+
+Vicente Rojas (Estructuras de Ranking - Árboles Heap y AVL) @vicenterojas05-beep
 
 ## Descripción del Proyecto
 Este proyecto es la segunda iteración de un reproductor de música interactivo en consola desarrollado en C++. Extiende la versión base incorporando estructuras de datos arbóreas avanzadas (Trie, Max-Heap y AVL). Estas estructuras permiten búsquedas ultrarrápidas de strings por subcadenas y generación de rankings (Top 10) en tiempo real, manteniendo la persistencia del estado y el conteo de reproducciones entre sesiones.
