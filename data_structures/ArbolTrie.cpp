@@ -60,3 +60,9 @@ void ArbolTrie::destruir(NodoTrie* nodo){
             destruir(nodo->hijos[i]);
     delete nodo;
 }
+std::string ArbolTrie::convertirMinusculas(const std::string& texto){
+    std::string r=texto;
+    for(unsigned int i=0;i<r.length();i++)
+        if(r[i]>='A'&&r[i]<='Z') r[i]+=32;
+    return r;
+}
