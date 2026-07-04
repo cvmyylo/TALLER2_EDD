@@ -12,10 +12,15 @@ Este proyecto es la segunda iteración de un reproductor de música interactivo 
 
 ## Estructura y Arquitectura
 El proyecto está modularizado para mantener un código limpio y escalable:
+
 *   `classes/`: Contiene el modelo de datos (`Cancion`).
+
 *   `data_structures/`: Contiene la implementación manual de los nodos (`Nodo`) y la estructuras de datos definidas como (`ArbolTrie`), (`ListaDobleEnlazada`), (`MaxHeapArtistas`) y (`MaxHeapCanciones`).
+
 *   `core/`: Contiene la lógica de negocio (`GestorArchivos` para la lectura del TXT y `ControladorReproductor` para la lógica de reproducción y persistencia).
+
 *   `music_source.txt`: Base de datos inicial con el listado de canciones disponibles.
+
 *   `status.cfg`: Archivo generado automáticamente para guardar el estado de la reproducción entre sesiones.
 
 Funcionalidades Implementadas
