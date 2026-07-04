@@ -8,7 +8,7 @@ Vicente Cárdenas (Estructuras de Búsqueda - Árbol Trie)
 Vicente Rojas (Estructuras de Ranking - Árboles Heap y AVL)
 
 ## Descripción del Proyecto
-Este proyecto es la segunda iteración de un reproductor de música interactivo en consola desarrollado en C++. Extiende la versión base incorporando estructuras de datos arbóreas avanzadas (Trie, Max-Heap y AVL) construidas desde cero sin uso de la STL. Estas estructuras permiten búsquedas ultrarrápidas de strings por subcadenas y generación de rankings (Top 10) en tiempo real, manteniendo la persistencia del estado y el conteo de reproducciones entre sesiones.
+Este proyecto es la segunda iteración de un reproductor de música interactivo en consola desarrollado en C++. Extiende la versión base incorporando estructuras de datos arbóreas avanzadas (Trie, Max-Heap y AVL). Estas estructuras permiten búsquedas ultrarrápidas de strings por subcadenas y generación de rankings (Top 10) en tiempo real, manteniendo la persistencia del estado y el conteo de reproducciones entre sesiones.
 
 ## Estructura y Arquitectura
 El proyecto está modularizado para mantener un código limpio y escalable:
