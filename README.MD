@@ -62,5 +62,5 @@ reproductor.exe
 ```bash
 make clean 
 make
-./reproductor.exe
+reproductor.exe
 ```
