@@ -11,7 +11,8 @@
 .vscode/
 cmake-build-debug/
 
-echo "reproductor" > .gitignore
-echo "*.o" >> .gitignore
-echo "status.cfg" >> .gitignore
-echo "song_ranking.txt" >> .gitignore
+# Archivos generados y ejecutables del proyecto
+
+reproductor
+status.cfg
+song_ranking.txt
