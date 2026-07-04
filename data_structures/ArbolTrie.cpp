@@ -30,3 +30,7 @@ void ArbolTrie::insertarSufijos(const std::string& texto,Cancion* cancion){
     for(unsigned int i=0;i<texto.length();i++)
         insertarCadena(texto.substr(i),cancion);
 }
+void ArbolTrie::insertarCancion(Cancion* cancion){
+    insertarSufijos(cancion->getTitulo(),cancion);
+    insertarSufijos(cancion->getArtista(),cancion);
+}
