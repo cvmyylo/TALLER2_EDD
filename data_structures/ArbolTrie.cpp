@@ -9,3 +9,6 @@ NodoTrie::~NodoTrie(){
         if(hijos[i]!=nullptr)
             delete hijos[i];
 }
+ArbolTrie::ArbolTrie(){
+    raiz=new NodoTrie('\0');
+}
