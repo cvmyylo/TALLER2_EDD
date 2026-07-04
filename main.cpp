@@ -10,6 +10,8 @@
 #include "data_structures/MaxHeapArtistas.h"
 #include "data_structures/ArbolTrie.h"
 // Prototipos para que C++ no se queje del orden de las funciones
+ArbolTrie arbolBusqueda; // Declaración global del árbol de búsqueda
+bool trieCargado = false; // Bandera para indicar si el trie ha sido cargado
 struct ArtistaStats; // Declaración adelantada del struct por si acaso
 void mostrarTopCanciones(ControladorReproductor& reproductor);
 void mostrarTopArtistas(ControladorReproductor& reproductor);
@@ -157,11 +159,11 @@ void manejarAgregarCancion(ControladorReproductor& reproductor) {
         Cancion nueva(nuevoId, titulo, artista, album, ano, duracion, ruta);
         
         reproductor.agregarCancionGlobal(nueva);
-        /*Nodo<Cancion>* ultimo = reproductor.getRegistroGlobal()->getCabeza();
+        Nodo<Cancion>* ultimo = reproductor.getRegistroGlobal()->getCabeza();
         while (ultimo->siguiente != nullptr){
             ultimo = ultimo->siguiente;
         }
-        arbolBusqueda.insertarCancion(&ultimo->dato);*/
+        arbolBusqueda.insertarCancion(&ultimo->dato);
         std::cout << "\nCancion agregada y guardada exitosamente.\n";
     } catch (...) {
         std::cout << "\nError: Datos numericos invalidos. No se guardo la cancion.\n";
@@ -190,10 +192,31 @@ void manejarEliminarCancion(ControladorReproductor& reproductor) {
 
 void manejarMenuBusqueda(ControladorReproductor& reproductor) {
     limpiarPantalla();
-    std::cout << "--- Busqueda de Canciones y Artistas ---\n";
-    std::cout << "(en construccion vicente cardenas)\n"; // en construccion
-    std::cout << "Presione Enter para volver...";
-    std::string pausa; std::getline(std::cin, pausa);
+    if(!trieCargado) {
+        std::cout << "Trie no inicializado.\n";
+        std::cin.get();
+        return;
+    }
+    std::string texto;
+    std::cout << "Busqueda de canciones\n\n";
+    std::cout << "Buscar canciones que contengan: ";
+    std::getline(std::cin, texto);
+    if (texto.empty()) return;
+    ListaDobleEnlazada<Cancion*> resultado = arbolBusqueda.buscar(texto);
+    limpiarPantalla();
+    std::cout << "Canciones que contienen \"" << texto << "\":\n\n";
+    Nodo<Cancion*>* actual = resultado.getCabeza();
+    int i = 1;
+    while (actual != nullptr) {
+        std::cout << i << ". " << actual->dato->getTitulo() << " - " << actual->dato->getArtista() << "\n";
+        actual = actual->siguiente;
+        i++;
+    }
+    if(i==1) {
+        std::cout << "No se encontraron canciones.\n";
+    }
+    std::cout << "\nPresione ENTER para continuar...";
+    std::getline(std::cin, texto);
 }
 
 
@@ -447,8 +470,13 @@ int main() {
     ListaDobleEnlazada<Cancion> registroCanciones;
     GestorArchivos::cargarFuenteMusica("music_source.txt", registroCanciones);
     GestorArchivos::cargarRankings("song_ranking.txt", registroCanciones); 
+    Nodo<Cancion>* aux = registroCanciones.getCabeza();
+    while (aux != nullptr) {
+        arbolBusqueda.insertarCancion(&aux->dato);
+        aux = aux->siguiente;
+    }
+    trieCargado = true; // Marcamos que el trie ha sido cargado
     ControladorReproductor reproductor(&registroCanciones);
-    ArbolTrie arbolBusqueda;
     Nodo<Cancion>* cursor = registroCanciones.getCabeza();
     while (cursor != nullptr){
         arbolBusqueda.insertarCancion(&cursor->dato);

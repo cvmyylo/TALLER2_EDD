@@ -22,7 +22,8 @@ void ArbolTrie::insertarCadena(const std::string& texto,Cancion* cancion){
         if(actual->hijos[indice]==nullptr)
             actual->hijos[indice]=new NodoTrie(texto[i]);
         actual=actual->hijos[indice];
-        actual->canciones.agregarAlFinal(cancion);
+        if(!existeEnLista(actual->canciones,cancion))
+            actual->canciones.agregarAlFinal(cancion);
     }
     actual->finPalabra=true;
 }
