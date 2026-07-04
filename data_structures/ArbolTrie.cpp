@@ -45,3 +45,11 @@ ListaDobleEnlazada<Cancion*> ArbolTrie::buscar(const std::string& texto){
     }
     return actual->canciones;
 }
+bool ArbolTrie::existeEnLista(ListaDobleEnlazada<Cancion*>& lista,Cancion* cancion){
+    Nodo<Cancion*>* aux=lista.getCabeza();
+    while(aux!=nullptr){
+        if(aux->dato==cancion) return true;
+        aux=aux->siguiente;
+    }
+    return false;
+}
