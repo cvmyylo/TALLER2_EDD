@@ -53,3 +53,10 @@ bool ArbolTrie::existeEnLista(ListaDobleEnlazada<Cancion*>& lista,Cancion* canci
     }
     return false;
 }
+void ArbolTrie::destruir(NodoTrie* nodo){
+    if(nodo==nullptr) return;
+    for(int i=0;i<128;i++)
+        if(nodo->hijos[i]!=nullptr)
+            destruir(nodo->hijos[i]);
+    delete nodo;
+}
