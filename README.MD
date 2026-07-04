@@ -2,6 +2,8 @@
 
 **Autor:** Camilo Montalván Aguirre
 
+**Colaborador 2** Vicente Cárdenas Romero
+
 ## Descripción del Proyecto
 Este proyecto es un reproductor de música interactivo basado en consola, desarrollado en C++. Implementa la gestión de una lista de reproducción y un registro global de canciones utilizando una lista doblemente enlazada.
 
