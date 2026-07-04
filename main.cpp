@@ -157,6 +157,11 @@ void manejarAgregarCancion(ControladorReproductor& reproductor) {
         Cancion nueva(nuevoId, titulo, artista, album, ano, duracion, ruta);
         
         reproductor.agregarCancionGlobal(nueva);
+        /*Nodo<Cancion>* ultimo = reproductor.getRegistroGlobal()->getCabeza();
+        while (ultimo->siguiente != nullptr){
+            ultimo = ultimo->siguiente;
+        }
+        arbolBusqueda.insertarCancion(&ultimo->dato);*/
         std::cout << "\nCancion agregada y guardada exitosamente.\n";
     } catch (...) {
         std::cout << "\nError: Datos numericos invalidos. No se guardo la cancion.\n";
@@ -443,6 +448,12 @@ int main() {
     GestorArchivos::cargarFuenteMusica("music_source.txt", registroCanciones);
     GestorArchivos::cargarRankings("song_ranking.txt", registroCanciones); 
     ControladorReproductor reproductor(&registroCanciones);
+    ArbolTrie arbolBusqueda;
+    Nodo<Cancion>* cursor = registroCanciones.getCabeza();
+    while (cursor != nullptr){
+        arbolBusqueda.insertarCancion(&cursor->dato);
+        cursor = cursor->siguiente;
+    }
     reproductor.cargarEstado();
 
     bool ejecutando = true;
