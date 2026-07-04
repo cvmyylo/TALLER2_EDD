@@ -8,7 +8,7 @@
 #include "core/ControladorReproductor.h"
 #include "data_structures/MaxHeapCanciones.h"
 #include "data_structures/MaxHeapArtistas.h"
-
+#include "data_structures/ArbolTrie.h"
 // Prototipos para que C++ no se queje del orden de las funciones
 struct ArtistaStats; // Declaración adelantada del struct por si acaso
 void mostrarTopCanciones(ControladorReproductor& reproductor);
