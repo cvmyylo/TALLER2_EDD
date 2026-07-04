@@ -12,3 +12,6 @@ NodoTrie::~NodoTrie(){
 ArbolTrie::ArbolTrie(){
     raiz=new NodoTrie('\0');
 }
+ArbolTrie::~ArbolTrie(){
+    delete raiz;
+}
