@@ -191,32 +191,67 @@ void manejarEliminarCancion(ControladorReproductor& reproductor) {
 }
 
 void manejarMenuBusqueda(ControladorReproductor& reproductor) {
-    limpiarPantalla();
     if(!trieCargado) {
+        limpiarPantalla();
         std::cout << "Trie no inicializado.\n";
         std::cin.get();
         return;
     }
-    std::string texto;
-    std::cout << "Busqueda de canciones\n\n";
-    std::cout << "Buscar canciones que contengan: ";
-    std::getline(std::cin, texto);
-    if (texto.empty()) return;
-    ListaDobleEnlazada<Cancion*> resultado = arbolBusqueda.buscar(texto);
-    limpiarPantalla();
-    std::cout << "Canciones que contienen \"" << texto << "\":\n\n";
-    Nodo<Cancion*>* actual = resultado.getCabeza();
-    int i = 1;
-    while (actual != nullptr) {
-        std::cout << i << ". " << actual->dato->getTitulo() << " - " << actual->dato->getArtista() << "\n";
-        actual = actual->siguiente;
-        i++;
+    bool seguir = true;
+    while (seguir) {
+        limpiarPantalla();
+        std::string texto;
+        std::cout << "Busqueda de canciones\n\n";
+        std::cout << "Buscar canciones que contengan: ";
+        std::getline(std::cin, texto);
+        if (texto.empty()) return;
+        ListaDobleEnlazada<Cancion*> resultado = arbolBusqueda.buscar(texto);
+        while (true) {
+            limpiarPantalla();
+            std::cout << "Canciones que contienen \"" << texto << "\":\n\n";
+            Nodo<Cancion*>* actual = resultado.getCabeza();
+            int contador = 1;
+            while (actual != nullptr) {
+                std::cout << contador << ". " << actual->dato->getTitulo() << " - " << actual->dato->getArtista() << "\n";
+                actual = actual->siguiente;
+                contador++;
+            }
+            if(contador==1) {
+                std::cout << "No se encontraron canciones.\n";
+            }
+            std::cout << "\nOpciones:\n";
+            std::cout << "R<num> - Reproducir cancion seleccionada\n";
+            std::cout << "A<num> - Agregar cancion seleccionada al final de la lista de reproduccion actual\n";
+            std::cout << "F - Repetir busqueda con un texto diferente\n";
+            std::cout << "V - Volver al menu principal\n";
+            std::cout << "\nIngrese Opcion: ";
+            std::string opcion;
+            std::getline(std::cin, opcion);
+            if (opcion.empty()) continue;
+            char cmd = toupper(opcion[0]);
+            if (cmd == 'V') {
+                return; 
+            } else if (cmd == 'F') {
+                break; 
+            } else if ((cmd == 'R' || cmd == 'A') && opcion.length() > 1) {
+                try {
+                    int indice = std::stoi(opcion.substr(1));
+                    if (indice < 1 || indice >= contador) continue;
+                    Nodo<Cancion*>* nodo = resultado.getCabeza();
+                    for (int i = 1; i < indice; i++) {
+                        nodo = nodo->siguiente;
+                    }
+                    if(nodo == nullptr) continue;
+                    int idCancion = nodo->dato->getId();
+                    if (cmd == 'R') {
+                        reproductor.reproducirDesdeGlobal(idCancion);
+                        return;
+                    }
+                    reproductor.encolarDesdeGlobal(idCancion);
+                } catch (...) {}
+            }
+        }
     }
-    if(i==1) {
-        std::cout << "No se encontraron canciones.\n";
-    }
-    std::cout << "\nPresione ENTER para continuar...";
-    std::getline(std::cin, texto);
 }
 
 
